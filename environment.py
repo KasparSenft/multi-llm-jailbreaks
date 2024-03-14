@@ -47,6 +47,8 @@ class Game(Environment):
 
         # Moderator
         self._moderator_speak(f"Welcome to the {self.setting} on {self.topic}.")
+        self._moderator_speak(f'This is Turn 1')
+        self.turn = 1
         observation = self.get_observation(self.get_next_player())
         return TimeStep(observation=observation, reward=self._get_zero_rewards(), terminal=False)
 
@@ -63,7 +65,7 @@ class Game(Environment):
         """
         Get the name of the next player.
         """
-        index = self.turn % 2
+        index = 1 - self.turn % 2
         return self.player_names[index]
 
     def step(self, player_name: str, action: str) -> TimeStep:
@@ -80,9 +82,9 @@ class Game(Environment):
         self.message_pool.append_message(message)
 
         # Update turn
+        self._moderator_speak(f"This is Turn {self.turn+1}.")
         self.turn += 1
 
-        self._moderator_speak(f"This is Turn {self.turn}.")
 
         # Check for termination
 
